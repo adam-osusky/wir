@@ -1,13 +1,25 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<h2>Login</h2>
+<style>
+    label, input {
+        display: block;
+    }
+    span.helptext {
+        display: none;
+    }
+</style>
 
-<form method="post">
+{% block page_content %}
+<div class="container">
+  <h2>Login</h2>
+
+  <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Login">
-</form>
+    <input type="submit" class="btn btn-primary" value="Login">
+  </form>
 
-<a href="{% url 'dashboard' %}">Back to dashboard</a>
+  <a href="{% url 'dashboard' %}" class="btn btn-secondary">Back to dashboard</a>
+  <a href="{% url 'register' %}" class="btn btn-secondary">Register a new account</a>
+</div>
 {% endblock %}
