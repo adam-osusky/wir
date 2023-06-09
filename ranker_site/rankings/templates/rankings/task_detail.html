@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+  <div class="container">
+    <h2>Task Detail</h2>
+
+    <div class="task-content">
+      {% for word in task.content.split %}
+        <a href="#" class="btn btn-primary">{{ word }}</a>
+      {% endfor %}
+    </div>
+
+    <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to Task List</a>
+  </div>
+{% endblock %}
