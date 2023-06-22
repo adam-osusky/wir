@@ -2,14 +2,42 @@
 
 {% block page_content %}
   <div class="container">
-    <h2>Task Detail</h2>
+    <h2>Task</h2>
 
     <div class="task-content">
       {% for word in task.content.split %}
-        <a href="#" class="btn btn-primary">{{ word }}</a>
+        <button class="word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
       {% endfor %}
     </div>
 
-    <a href="{% url 'dashboard' %}" class="btn btn-primary">Back to Task List</a>
+    <button class="submit-button" onclick="submitOrder()">Submit order</button>
   </div>
+
+  <script>
+    var selectedWords = [];
+
+    function toggleButtonColor(button) {
+      if (button.classList.contains('selected')) {
+        button.classList.remove('selected');
+        var index = selectedWords.indexOf(button.textContent);
+        if (index !== -1) {
+          selectedWords.splice(index, 1);
+        }
+      } else {
+        button.classList.add('selected');
+        selectedWords.push(button.textContent);
+      }
+    }
+
+    function submitOrder() {
+      // Display selected words (for demonstration purposes)
+      console.log('Selected words:', selectedWords);
+    }
+  </script>
+
+  <style>
+    .selected {
+      background-color: yellow;
+    }
+  </style>
 {% endblock %}
