@@ -8,7 +8,7 @@
     <p>Score: {{ score }}</p>
 
     <div class="button-container">
-<!--      <a href="/next_task" class="btn btn-primary">Next Task</a>-->
+      <a href="{% url 'task_detail' %}" class="btn btn-primary">Next Task</a>
       <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
     </div>
   </div>
