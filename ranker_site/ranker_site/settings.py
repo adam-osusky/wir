@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-oh2z^h%li5m6%h89b8(_ivw)pw9%8x9emv&z89e=(i1dns9%#t
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -72,7 +70,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'ranker_site.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -82,7 +79,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -103,7 +99,6 @@ AUTH_PASSWORD_VALIDATORS = [
     # },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -115,7 +110,6 @@ USE_I18N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
@@ -126,7 +120,25 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # login params
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'dashboard'
+
+# # Session Configuration
+# # Set the storage engine for sessions (default: database-based)
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+#
+# # Set the name of the session cookie (default: 'sessionid')
+# SESSION_COOKIE_NAME = 'your_session_cookie_name'
+#
+# # Set the session cookie to be secure (HTTPS-only) (default: False)
+# SESSION_COOKIE_SECURE = True
+#
+# # Set the session cookie to be accessible only via HTTP (default: True)
+# SESSION_COOKIE_HTTPONLY = True
+#
+# # Set the session cookie to expire when the browser is closed (default: True)
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+#
+# # Set the session cookie's lifetime (in seconds) (default: 2 weeks)
+# SESSION_COOKIE_AGE = 3600  # 1 hour

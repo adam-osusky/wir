@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block page_content %}
+  <div class="container">
+    <h2>Score</h2>
+
+    <p>Task ID: {{ task_id }}</p>
+    <p>Score: {{ score }}</p>
+
+    <div class="button-container">
+<!--      <a href="/next_task" class="btn btn-primary">Next Task</a>-->
+      <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+    </div>
+  </div>
+{% endblock %}

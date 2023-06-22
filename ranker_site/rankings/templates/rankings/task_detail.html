@@ -30,43 +30,66 @@
       }
     }
 
-      function submitOrder() {
-        // Get the user ID and task ID from your backend or any appropriate source
-        var userId = document.getElementById('user-id').value;
-        var taskId = "{{ task.id }}";
+    function submitOrder() {
+      // Get the user ID and task ID from your backend or any appropriate source
+      var userId = document.getElementById('user-id').value;
+      var taskId = "{{ task.id }}";
 
-        // Prepare the order data to be sent to the server
-        var orderData = {
-          userId: userId,
-          taskId: taskId,
-          selectedWords: selectedWords
-        };
+      // Prepare the order data to be sent to the server
+      var orderData = {
+        userId: userId,
+        taskId: taskId,
+        selectedWords: selectedWords
+      };
 
-        // Send the order data to the server
-        // You can use AJAX, fetch, or any other method to send the data
-        // Here, we'll use fetch as an example
-        fetch('/submit-order', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(orderData)
+      var csrftoken = getCookie('csrftoken');
+
+      // Send the order data to the server
+      // You can use AJAX, fetch, or any other method to send the data
+      // Here, we'll use fetch as an example
+      fetch('/rankings/submit_task', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(orderData)
+      })
+        .then(response => {
+          if (response.ok) {
+            // Parse the response JSON
+            return response.json();
+          } else {
+            throw new Error('Failed to submit the order.');
+          }
         })
-          .then(response => {
-            if (response.ok) {
-              console.log('Order submitted successfully!');
-              // Perform any further actions or display success message
-            } else {
-              console.error('Failed to submit the order.');
-              // Handle the error condition appropriately
-            }
-            console.log(orderData)
-          })
-          .catch(error => {
-            console.error('An error occurred while submitting the order:', error);
-            // Handle the error condition appropriately
-          });
+        .then(data => {
+          // Access the score value from the response JSON
+          var score = data.score;
+          console.log('Order submitted successfully! Score:', score);
+          // Redirect to the score_task page
+          window.location.href = `/rankings/score_task/?task_id=${taskId}&score=${score}`;
+        })
+        .catch(error => {
+          console.error('An error occurred while submitting the order:', error);
+          // Handle the error condition appropriately
+        });
+    }
+
+  function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
       }
+    }
+    return cookieValue;
+  }
   </script>
 
   <style>
