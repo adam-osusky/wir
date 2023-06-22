@@ -11,7 +11,6 @@
     </div>
 
     <button class="submit-button" onclick="submitOrder()">Submit order</button>
-    <input type="hidden" id="user-id" value="{{ user_id }}">
   </div>
 
   <script>
@@ -32,7 +31,7 @@
 
     function submitOrder() {
       // Get the user ID and task ID from your backend or any appropriate source
-      var userId = document.getElementById('user-id').value;
+      var userId = "{{ user_id }}"
       var taskId = "{{ task.id }}";
 
       // Prepare the order data to be sent to the server
@@ -67,6 +66,7 @@
           // Access the score value from the response JSON
           var score = data.score;
           console.log('Order submitted successfully! Score:', score);
+<!--          console.log('user id', userId);-->
           // Redirect to the score_task page
           window.location.href = `/rankings/score_task/?task_id=${taskId}&score=${score}`;
         })
