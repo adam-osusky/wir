@@ -11,6 +11,7 @@
     </div>
 
     <button class="submit-button" onclick="submitOrder()">Submit order</button>
+    <input type="hidden" id="user-id" value="{{ user_id }}">
   </div>
 
   <script>
@@ -29,10 +30,43 @@
       }
     }
 
-    function submitOrder() {
-      // Display selected words (for demonstration purposes)
-      console.log('Selected words:', selectedWords);
-    }
+      function submitOrder() {
+        // Get the user ID and task ID from your backend or any appropriate source
+        var userId = document.getElementById('user-id').value;
+        var taskId = "{{ task.id }}";
+
+        // Prepare the order data to be sent to the server
+        var orderData = {
+          userId: userId,
+          taskId: taskId,
+          selectedWords: selectedWords
+        };
+
+        // Send the order data to the server
+        // You can use AJAX, fetch, or any other method to send the data
+        // Here, we'll use fetch as an example
+        fetch('/submit-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(orderData)
+        })
+          .then(response => {
+            if (response.ok) {
+              console.log('Order submitted successfully!');
+              // Perform any further actions or display success message
+            } else {
+              console.error('Failed to submit the order.');
+              // Handle the error condition appropriately
+            }
+            console.log(orderData)
+          })
+          .catch(error => {
+            console.error('An error occurred while submitting the order:', error);
+            // Handle the error condition appropriately
+          });
+      }
   </script>
 
   <style>
