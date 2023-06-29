@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import json
-from .models import Task
+from .models import Task, Assignment, User, Ranking
 from .task_assignment import get_task
 
 
@@ -24,12 +24,20 @@ def submit_task(request):
         word_order = order_data.get('selectedWords')
         print(word_order)
 
-        # TODO save the word order into the db
         # TODO check if taskid-userid already submitted
-        # get score of submition
-        score = calculate_score(word_order)
+        assignment = find_assignment(user_id, task_id)
+        if assignment:
+            # TODO update the mean of rankings
 
-        return JsonResponse({'score': score})
+            # get the score of submition
+            score = calculate_score(word_order, task_id)
+
+            # save the word order into the db
+            ranking = Ranking(assignment=assignment, score=score)
+            ranking.set_word_order(word_order)
+            ranking.save()
+
+            return JsonResponse({'score': score})
 
     # Handle other HTTP methods if necessary
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
@@ -52,7 +60,18 @@ def score_task(request):
     return render(request, 'rankings/score_task.html', context)
 
 
-def calculate_score(word_order):
+def calculate_score(word_order, task_id):
     # scoring function
     score = len(word_order)  # TODO
     return score
+
+
+def find_assignment(user_id, task_id):
+    try:
+        user = User.objects.get(id=user_id)
+        task = Task.objects.get(id=task_id)
+        assignment = Assignment.objects.get(user=user, task=task)
+        return assignment
+    except Assignment.DoesNotExist:
+        return None
+

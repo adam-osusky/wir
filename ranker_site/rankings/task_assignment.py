@@ -1,2 +1,5 @@
+import random
+
+
 def get_task(user_id):
-    return 1
+    return random.randint(1, 2)
