@@ -20,12 +20,10 @@ class Assignment(models.Model):
 class Ranking(models.Model):
     assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE)
     score = models.FloatField(default=0.0)
-    word_order = models.TextField()  # TODO same words at different position - differentiate
+    word_order = models.TextField()
 
     def set_word_order(self, order):
-        # self.word_order = " ".join(string_list)
         self.word_order = json.dumps(order)
 
     def get_word_order(self):
-        # return self.word_order.split(" ")
         return json.loads(self.word_order)

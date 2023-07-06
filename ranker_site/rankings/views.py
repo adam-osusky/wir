@@ -3,6 +3,7 @@ from django.http import JsonResponse
 import json
 from .models import Task, Assignment, User, Ranking
 from .task_assignment import get_task
+from .scoring_funcs import levenshtein
 
 
 def task_detail(request):
@@ -24,7 +25,6 @@ def submit_task(request):
         word_order = order_data.get('selectedWords')
         print(word_order)
 
-        # TODO check if taskid-userid already submitted
         assignment = find_assignment(user_id, task_id)
         if assignment:
             # TODO update the mean of rankings
@@ -61,8 +61,7 @@ def score_task(request):
 
 
 def calculate_score(word_order, task_id):
-    # scoring function
-    score = len(word_order)  # TODO
+    score = levenshtein(word_order, task_id)
     return score
 
 
@@ -75,3 +74,9 @@ def find_assignment(user_id, task_id):
     except Assignment.DoesNotExist:
         return None
 
+
+# def process_word_order(wo):
+#     """Give every word its rank and add unselected words with the same last rank"""
+#     for i, w in enumerate(wo):
+#         w['rank'] = i
+#     return wo
