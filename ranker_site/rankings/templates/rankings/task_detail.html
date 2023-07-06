@@ -17,15 +17,18 @@
     var selectedWords = [];
 
     function toggleButtonColor(button) {
+      var word = button.textContent;
+      var position = Array.from(button.parentElement.children).indexOf(button) + 1;
+      var wordObj = { word: word, position: position };
       if (button.classList.contains('selected')) {
         button.classList.remove('selected');
-        var index = selectedWords.indexOf(button.textContent);
+        var index = selectedWords.findIndex(obj => obj.word === word && obj.position === position);
         if (index !== -1) {
           selectedWords.splice(index, 1);
         }
       } else {
         button.classList.add('selected');
-        selectedWords.push(button.textContent);
+        selectedWords.push(wordObj);
       }
     }
 
@@ -66,6 +69,7 @@
           // Access the score value from the response JSON
           var score = data.score;
           console.log('Order submitted successfully! Score:', score);
+          console.log('selectedwords', selectedWords);
 <!--          console.log('user id', userId);-->
           // Redirect to the score_task page
           window.location.href = `/rankings/score_task/?task_id=${taskId}&score=${score}`;
