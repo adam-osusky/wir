@@ -11,7 +11,8 @@ parent_path = os.path.dirname(current_path)
 sys.path.append(parent_path)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ranker_site.settings")
 django.setup()
-from rankings.models import Task
+from rankings.models import Task, Assignment
+from django.contrib.auth.models import User
 
 parser = argparse.ArgumentParser()
 
@@ -40,6 +41,23 @@ def add_tasks_to_database(dataset):
         i += 1
 
 
+def add_assignments_for_user(user_id):
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        print(f"User with ID {user_id} does not exist.")
+        return
+
+    tasks = Task.objects.all()
+
+    for task in tasks:
+        # Check if the assignment already exists for this user and task
+        if not Assignment.objects.filter(user=user, task=task).exists():
+            assignment = Assignment(user=user, task=task, is_completed=False)
+            assignment.save()
+            print(f"Assignment created for user '{user.username}' for task: '{task}'.")
+
+
 def main(args: argparse.Namespace):
     if args.dataset.startswith("glue"):
         ds_name, ds_subset = args.dataset.split(";")
@@ -51,8 +69,17 @@ def main(args: argparse.Namespace):
     dataset = dataset.shuffle(seed=args.seed)
 
     add_tasks_to_database(dataset)
+    add_assignments_for_user(1)
 
 
 if __name__ == "__main__":
     args = parser.parse_args([] if "__file__" not in globals() else None)
     main(args)
+    # username_to_find = 'adas'
+    #
+    # try:
+    #     user = User.objects.get(username=username_to_find)
+    #     user_id = user.id
+    #     print(f"The user_id for '{username_to_find}' is {user_id}.")
+    # except User.DoesNotExist:
+    #     print(f"User '{username_to_find}' does not exist.")
