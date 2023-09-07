@@ -9,8 +9,12 @@ from .scoring_funcs import levenshtein
 def task_detail(request):
     user_id = request.user.id
     task_pk = get_task(user_id)
-    context = {'task': Task.objects.get(pk=task_pk), 'user_id': user_id}
-    return render(request, 'rankings/task_detail.html', context)
+    if task_pk:
+        context = {'task': Task.objects.get(pk=task_pk), 'user_id': user_id}
+        return render(request, 'rankings/task_detail.html', context)
+    else:
+        # no unfinished assignments
+        return render(request, 'users/dashboard.html')
 
 
 def submit_task(request):
@@ -36,6 +40,9 @@ def submit_task(request):
             ranking = Ranking(assignment=assignment, score=score)
             ranking.set_word_order(word_order)
             ranking.save()
+
+            assignment.is_completed = True
+            assignment.save()
 
             return JsonResponse({'score': score})
 
