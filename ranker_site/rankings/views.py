@@ -81,7 +81,6 @@ def find_assignment(user_id, task_id):
     except Assignment.DoesNotExist:
         return None
 
-
 # def process_word_order(wo):
 #     """Give every word its rank and add unselected words with the same last rank"""
 #     for i, w in enumerate(wo):
