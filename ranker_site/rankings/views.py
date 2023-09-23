@@ -4,6 +4,7 @@ import json
 from .models import Task, Assignment, User, Ranking
 from .task_assignment import get_task
 from .scoring_funcs import levenshtein
+from users.models import UserProfile
 
 
 def task_detail(request):
@@ -43,6 +44,10 @@ def submit_task(request):
 
             assignment.is_completed = True
             assignment.save()
+
+            user_profile = UserProfile.objects.get(user=User.objects.get(pk=user_id))
+            user_profile.score += score
+            user_profile.save()
 
             return JsonResponse({'score': score})
 
