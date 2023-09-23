@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import json
 from .models import Task, Assignment, User, Ranking
 from .task_assignment import get_task
-from .scoring_funcs import levenshtein
+from .scoring_funcs import levenshtein, refresh_overall_score
 from users.models import UserProfile
 
 
@@ -85,6 +85,13 @@ def find_assignment(user_id, task_id):
         return assignment
     except Assignment.DoesNotExist:
         return None
+
+
+def user_leaderboard(request):
+    ranked_users = UserProfile.objects.order_by('-score')
+    if request.user.is_authenticated:
+        refresh_overall_score(request.user.id)
+    return render(request, 'rankings/user_leaderboard.html', {'ranked_users': ranked_users})
 
 # def process_word_order(wo):
 #     """Give every word its rank and add unselected words with the same last rank"""
