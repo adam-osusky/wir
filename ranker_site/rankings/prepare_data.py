@@ -22,9 +22,9 @@ parser.add_argument("--num_samples", default=3, type=int, help="Number of tasks 
 
 
 def preprocess_text(text, tokenizer=None):
-    if len(text) < 30:  # filter too long texts
-        return False, ""
-    elif "= =" in text:  # wikitext - filter headings
+    # if len(text) > 30:  # filter too long texts
+    #     return False, ""
+    if "= =" in text:  # wikitext - filter headings
         return False, ""
     if tokenizer:
         tokenized = " ".join(tokenizer(text))
