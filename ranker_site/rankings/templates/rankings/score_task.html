@@ -2,14 +2,24 @@
 
 {% block page_content %}
   <div class="container">
-    <h2>Score</h2>
-
-    <p>Task ID: {{ task_id }}</p>
-    <p>Score: {{ score }}</p>
-
-    <div class="button-container">
-      <a href="{% url 'task_detail' %}" class="btn btn-primary">Next Task</a>
-      <a href="{% url 'dashboard' %}" class="btn btn-primary">Dashboard</a>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="text-center">Score</h2>
+          </div>
+          <div class="card-body">
+            <div class="text-center">
+<!--              <p class="h4">Task ID: {{ task_id }}</p>-->
+              <p class="h4">Score: {{ score }}</p>
+            </div>
+            <div class="button-container text-center mt-4">
+              <a href="{% url 'task_detail' %}" class="btn btn-primary mr-3">Next Task</a>
+              <a href="{% url 'dashboard' %}" class="btn btn-secondary">Dashboard</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 {% endblock %}

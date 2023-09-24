@@ -23,7 +23,7 @@ def levenshtein(word_order, task_id):
 
     # Compute the final score as the inverse of the average distance
     avg_dist = (sum_dist / num_rankings)
-    final_score = int(avg_dist)
+    # final_score = int(avg_dist)
     final_score = 1 / avg_dist
     final_score = int(final_score * 100)
     print(avg_dist)

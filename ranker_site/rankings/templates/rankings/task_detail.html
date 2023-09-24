@@ -2,15 +2,15 @@
 
 {% block page_content %}
   <div class="container">
-    <h2>Task</h2>
+    <h2 class="mb-4">Task</h2>
 
     <div class="task-content">
       {% for word in task.content.split %}
-        <button class="word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
+        <button class="btn btn-outline-secondary word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
       {% endfor %}
     </div>
 
-    <button class="submit-button" onclick="submitOrder()">Submit order</button>
+    <button class="btn btn-primary mt-4" onclick="submitOrder()">Submit Order</button>
   </div>
 
   <script>
@@ -30,14 +30,30 @@
         button.classList.add('selected');
         selectedWords.push(wordObj);
       }
+      updateButtonColors();
+    }
+
+    function updateButtonColors() {
+      var totalWords = selectedWords.length;
+      var buttons = document.querySelectorAll('.word-button');
+
+      buttons.forEach(function (button) {
+        button.style.backgroundColor = ''; // Reset background color for all buttons
+      });
+
+      selectedWords.forEach(function (wordObj, index) {
+        var hue = 240 - (index * 60 / totalWords);
+        var brightness = 30 + (50 / totalWords) * (index + 1); // Calculate brightness between 30% and 80%
+<!--        var color = `hsl(60, 100%, ${brightness}%)`; // Use HSL color with varying brightness-->
+        var color = `hsl(${hue}, 100%, 50%)`;
+        buttons[wordObj.position].style.backgroundColor = color;
+      });
     }
 
     function submitOrder() {
-      // Get the user ID and task ID from your backend or any appropriate source
       var userId = "{{ user_id }}"
       var taskId = "{{ task.id }}";
 
-      // Prepare the order data to be sent to the server
       var orderData = {
         userId: userId,
         taskId: taskId,
@@ -46,9 +62,6 @@
 
       var csrftoken = getCookie('csrftoken');
 
-      // Send the order data to the server
-      // You can use AJAX, fetch, or any other method to send the data
-      // Here, we'll use fetch as an example
       fetch('/rankings/submit_task', {
         method: 'POST',
         headers: {
@@ -59,46 +72,40 @@
       })
         .then(response => {
           if (response.ok) {
-            // Parse the response JSON
             return response.json();
           } else {
             throw new Error('Failed to submit the order.');
           }
         })
         .then(data => {
-          // Access the score value from the response JSON
           var score = data.score;
           console.log('Order submitted successfully! Score:', score);
-<!--          console.log('selectedwords', selectedWords);-->
-<!--          console.log('user id', userId);-->
-          // Redirect to the score_task page
           window.location.href = `/rankings/score_task/?task_id=${taskId}&score=${score}`;
         })
         .catch(error => {
           console.error('An error occurred while submitting the order:', error);
-          // Handle the error condition appropriately
         });
     }
 
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
         }
       }
+      return cookieValue;
     }
-    return cookieValue;
-  }
   </script>
 
-  <style>
-    .selected {
-      background-color: yellow;
-    }
-  </style>
+<style>
+  .selected {
+    color: black; /* Add this line to set text color to black */
+  }
+</style>
 {% endblock %}

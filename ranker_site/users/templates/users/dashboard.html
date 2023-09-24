@@ -1,21 +1,25 @@
 {% extends 'base.html' %}
 
 {% block page_content %}
-<div class="row justify-content-center">
-  <div class="col-md-8">
-    <div class="card">
-      <div class="card-header">Hello, {{ user.username|default:'Guest' }}!</div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-md-8 offset-md-2">
-            {% if user.is_authenticated %}
-              <a href="{% url 'logout' %}" class="btn btn-primary">Logout</a>
-              <a href="{% url 'task_detail' %}" class="btn btn-primary">Start</a>
-            {% else %}
-              <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-              <a href="{% url 'register' %}" class="btn btn-secondary">Register a new account</a>
-            {% endif %}
-            <a href="{% url 'user_leaderboard' %}" class="btn btn-primary">Leaderboards</a>
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card">
+        <div class="card-header">
+          Hello, {{ user.username|default:'Guest' }}!
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-8 offset-md-2">
+              <a href="{% url 'user_leaderboard' %}" class="btn btn-primary btn-block">Leaderboards</a>
+              {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn btn-primary btn-block mb-3">Logout</a>
+                <a href="{% url 'task_detail' %}" class="btn btn-primary btn-block mb-3">Start</a>
+              {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary btn-block mb-3">Login</a>
+                <a href="{% url 'register' %}" class="btn btn-primary btn-block mb-3">Register a new account</a>
+              {% endif %}
+            </div>
           </div>
         </div>
       </div>
