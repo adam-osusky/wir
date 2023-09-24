@@ -23,3 +23,8 @@ def register(request):
             user_profile = UserProfile(user=user)
             user_profile.save()
             return redirect(reverse("dashboard"))
+        else:
+            return render(
+                request, "users/register.html",
+                {"form": form}
+            )
