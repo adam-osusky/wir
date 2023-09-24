@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block page_content %}
+<div class="container">
+    <h1 class="display-4 text-center mt-4">Leaderboard</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">Rank</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Score</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_profile in ranked_users %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td> {# Display the rank using forloop.counter #}
+                        <td>{{ user_profile.user.username }}</td> {# Display the username #}
+                        <td>{{ user_profile.score }}</td> {# Display the score #}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
