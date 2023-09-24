@@ -5,6 +5,7 @@ import sys
 
 import django
 from datasets import load_dataset
+from mosestokenizer import MosesTokenizer
 
 current_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.dirname(current_path)
@@ -12,29 +13,32 @@ sys.path.append(parent_path)
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ranker_site.settings")
 django.setup()
 from rankings.models import Task, Assignment
-from prepare_data_utils import add_assignments_for_user
-from django.contrib.auth.models import User
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument("--seed", default=69, type=int, help="Random seed.")
 parser.add_argument("--dataset", default="glue;ax", type=str, help="Dataset to use.")
+parser.add_argument("--num_samples", default=3, type=int, help="Number of tasks to create.")
 
 
-def preprocess_text(text):
-    if len(text) < 30:
+def preprocess_text(text, tokenizer=None):
+    if len(text) < 30:  # filter too long texts
         return False, ""
-    elif "= =" in text:
+    elif "= =" in text:  # wikitext - filter headings
         return False, ""
-    return True, text.lower()
+    if tokenizer:
+        tokenized = " ".join(tokenizer(text))
+        text = tokenized.replace("&apos;", "'")
+    return True, text
 
 
-def add_tasks_to_database(dataset):
+def add_tasks_to_database(dataset, num_samples=float('inf')):
     i = 1
+    tokenizer = MosesTokenizer('en')
     for example in dataset:
-        if i > 3:
+        if i > num_samples:
             break
-        good, content = preprocess_text(example['text'])
+        good, content = preprocess_text(example['text'], tokenizer)
         if not good:
             continue
         task = Task(content=content)
@@ -52,7 +56,7 @@ def main(args: argparse.Namespace):
 
     dataset = dataset.shuffle(seed=args.seed)
 
-    add_tasks_to_database(dataset)
+    add_tasks_to_database(dataset, args.num_samples)
     # add_assignments_for_user(1)
 
 
