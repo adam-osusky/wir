@@ -18,6 +18,8 @@ def levenshtein(word_order, task_id):
     num_rankings = len(scores)
 
     # fail safe
+    if num_rankings == 0:
+        return 0
     if sum_dist == 0:
         return 100
 
