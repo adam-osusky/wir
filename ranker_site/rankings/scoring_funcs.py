@@ -19,7 +19,7 @@ def levenshtein(word_order, task_id):
 
     # fail safe
     if sum_dist == 0:
-        return 0
+        return 100
 
     # Compute the final score as the inverse of the average distance
     avg_dist = (sum_dist / num_rankings)
