@@ -89,7 +89,7 @@ def find_assignment(user_id, task_id):
 
 def user_leaderboard(request):
     ranked_users = UserProfile.objects.order_by('-score')
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and not request.user.is_superuser:
         refresh_overall_score(request.user.id)
     return render(request, 'rankings/user_leaderboard.html', {'ranked_users': ranked_users})
 
