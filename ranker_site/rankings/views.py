@@ -15,7 +15,8 @@ def task_detail(request):
         return render(request, 'rankings/task_detail.html', context)
     else:
         # no unfinished assignments
-        return render(request, 'users/dashboard.html')
+        # return render(request, 'users/dashboard.html')
+        return render(request, 'rankings/no_tasks_page.html')
 
 
 def submit_task(request):
