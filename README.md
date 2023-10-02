@@ -18,6 +18,8 @@ Features:
 
 
 ## Getting started
+This projected was developed with Python 3.11.3 version.
+
 To set up this web application, follow these steps:
 
 1. Clone this repository and install the required dependencies.
