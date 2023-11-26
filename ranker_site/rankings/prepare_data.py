@@ -22,13 +22,17 @@ parser.add_argument("--num_samples", default=3, type=int, help="Number of tasks 
 
 
 def preprocess_text(text, tokenizer=None):
-    # if len(text) > 30:  # filter too long texts
-    #     return False, ""
-    if "= =" in text:  # wikitext - filter headings
-        return False, ""
+    text = text.replace("\n", " \\n ")  # moses tokenizer has problem with newlines
+    
     if tokenizer:
         tokenized = " ".join(tokenizer(text))
-        text = tokenized.replace("&apos;", "'")
+        text = tokenized\
+            .replace("&apos;", "'")\
+            .replace("&quot;", "\"")\
+            .replace("&lt;", "<")\
+            .replace("&gt;", ">")\
+            .replace(" @-@ ", "-")\
+            .replace(" \\ n ", "\n")
     return True, text
 
 
@@ -51,6 +55,9 @@ def main(args: argparse.Namespace):
         ds_name, ds_subset = args.dataset.split(";")
         dataset = load_dataset(ds_name, ds_subset, split="all")
         dataset = dataset.rename_column("premise", "text")
+    elif args.dataset.startswith("adasgaleus"):
+        dataset = load_dataset(args.dataset, split="test")
+        dataset = dataset.rename_column("context", "text")
     else:
         raise ValueError("The provided dataset \"{args.dataset}\" is not supported.")
 
