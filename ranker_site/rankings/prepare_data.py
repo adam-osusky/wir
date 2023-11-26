@@ -33,7 +33,8 @@ def preprocess_text(text, tokenizer=None):
             .replace("&lt;", "<")\
             .replace("&gt;", ">")\
             .replace(" @-@ ", "-")\
-            .replace(" \\ n ", "\n")
+            .replace(" \\ n ", "\n")\
+            .replace("--", " -- ")
         text = re.sub(r"\( PERSON(\d+) \)", r"(PERSON\1)", text)
         text = re.sub(r"<([^>]*)>", lambda match: "<" + "".join(match.group(1).split()) + ">", text)
     return True, text

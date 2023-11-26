@@ -9,7 +9,9 @@ class Task(models.Model):
 
     def __str__(self):
         return self.content[:30]
-
+    
+    def content_lines(self):
+        return self.content.split("\n")
 
 class Assignment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

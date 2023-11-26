@@ -4,11 +4,14 @@
   <div class="container">
     <h2 class="mb-4">Task</h2>
 
-    <div class="task-content">
-      {% for word in task.content.split %}
-        <button class="btn btn-outline-secondary word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
-      {% endfor %}
-    </div>
+        <div class="task-content">
+          {% for line in task.content_lines %}
+            {% for word in line.split %}
+              <button class="btn btn-outline-secondary word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
+            {% endfor %}
+            <br>
+          {% endfor %}
+        </div>
 
     <button class="btn btn-primary mt-4" onclick="submitOrder()">Submit Order</button>
   </div>
@@ -18,7 +21,11 @@
 
     function toggleButtonColor(button) {
       var word = button.textContent;
-      var position = Array.from(button.parentElement.children).indexOf(button);
+<!--      token of this type should not be clickable-->
+      if (word.includes("(PERSON")) {
+        return;
+      }
+      var position = Array.from(button.parentElement.children).filter(child => child.tagName !== 'BR').indexOf(button);
       var wordObj = { word: word, position: position };
       if (button.classList.contains('selected')) {
         button.classList.remove('selected');
