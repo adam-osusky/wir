@@ -6,7 +6,11 @@
     <div class="col-md-8">
       <div class="card">
         <div class="card-header">
-          Hello, {{ user.username|default:'Guest' }}!
+          {% if user.is_authenticated %}
+          Welcome, {{ user.username|default:'Guest' }}!
+          {% else %}
+          Please login or register a new account.
+          {% endif %}
         </div>
         <div class="card-body">
           <div class="row">
@@ -24,6 +28,9 @@
         </div>
       </div>
     </div>
+  </div>
+  <div class="mt-5 text-center">
+    <p>This site is dedicated to collecting annotations for text data, aimed at creating a research dataset for the evaluation of natural language processing systems. Once you are registered, you can initiate the annotation process by clicking Start button. You will be presented with brief snippets of text, and your task will be to rank the words based on their importance. More detailed instruction will be provided to guide you consistently throughout the annotation process.</p>
   </div>
 </div>
 {% endblock %}
