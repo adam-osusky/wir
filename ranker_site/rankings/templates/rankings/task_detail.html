@@ -4,14 +4,18 @@
   <div class="container">
     <h2 class="mb-4">Task</h2>
 
-        <div class="task-content">
-          {% for line in task.content_lines %}
-            {% for word in line.split %}
-              <button class="btn btn-outline-secondary word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
-            {% endfor %}
-            <br>
-          {% endfor %}
-        </div>
+    <div class="task-content">
+      {% for line in task.content_lines %}
+        {% for word in line.split %}
+          {% if "(PERSON" not in word %}
+            <button class="btn btn-outline-secondary word-button" onclick="toggleButtonColor(this)">{{ word }}</button>
+          {% else %}
+                <button class="btn btn-outline-secondary word-button" style="background-color: lightgrey; color: black;">{{ word }}</button>
+          {% endif %}
+        {% endfor %}
+        <br>
+      {% endfor %}
+    </div>
 
     <button class="btn btn-primary mt-4" onclick="submitOrder()">Submit Order</button>
 
@@ -51,6 +55,9 @@
 
       buttons.forEach(function (button) {
         button.style.backgroundColor = ''; // Reset background color for all buttons
+        if (button.textContent.includes("(PERSON")) {
+        button.style.backgroundColor = 'lightgrey';
+      }
       });
 
       selectedWords.forEach(function (wordObj, index) {
