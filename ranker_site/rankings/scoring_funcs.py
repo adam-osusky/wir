@@ -3,9 +3,11 @@ from .models import User, Ranking, Assignment
 from users.models import UserProfile
 
 
-def levenshtein(word_order, task_id):
+def levenshtein(word_order, task_id, user_id=None):
     # Retrieve all the Ranking instances for the given task_id
     rankings = Ranking.objects.filter(assignment__task_id=task_id)
+    if user_id is not None:
+        rankings = rankings.exclude(assignment__user_id=user_id)
     positions = [item['position'] for item in word_order]  # {word, position}
 
     scores = []
@@ -44,7 +46,7 @@ def refresh_overall_score(user_id):
             ranking = Ranking.objects.get(assignment=assignment)
             task_id = assignment.task.pk
             word_order = ranking.get_word_order()
-            score += levenshtein(word_order, task_id)
+            score += levenshtein(word_order, task_id, user_id)
         profile = UserProfile.objects.get(user=user)
         profile.score = score
         profile.save()
