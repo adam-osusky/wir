@@ -43,7 +43,9 @@ def refresh_overall_score(user_id):
         for assignment in assignments_of_user:
             if not assignment.is_completed:
                 continue
-            ranking = Ranking.objects.get(assignment=assignment)
+            # TODO: sometimes two exact same rankings are saved into the database
+            rankings = Ranking.objects.filter(assignment=assignment)
+            ranking = rankings.first()
             task_id = assignment.task.pk
             word_order = ranking.get_word_order()
             score += levenshtein(word_order, task_id, user_id)
